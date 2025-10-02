@@ -1,6 +1,8 @@
 import sys
 from pytrends.request import TrendReq
 
+
+# ! FIXME: Google returned a response with code 400
 def analyze_trends(keyword_list: list[str], timeframe: str, geography: str, timezone: int, category_id: int = 0):
     """
     Fetches Google Trends data for a list of keywords and generates a line chart.
