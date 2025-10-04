@@ -2,7 +2,11 @@ import sys
 from pytrends.request import TrendReq
 
 
-# ! FIXME: Google returned a response with code 400
+class TrendAnalysisError(Exception):
+    """Custom exception for errors during the trend analysis process."""
+    pass
+
+
 def analyze_trends(keyword_list: list[str], timeframe: str, geography: str, timezone: int, category_id: int = 0):
     """
     Fetches Google Trends data for a list of keywords and generates a line chart.
@@ -16,6 +20,13 @@ def analyze_trends(keyword_list: list[str], timeframe: str, geography: str, time
     :param category_id: Category to narrow results, For getting the complete list of categories and their ids
                      refer: https://github.com/pat310/google-trends-api/wiki/Google-Trends-Categories
     """
+    # Maximum values in the list must not exceed 5, refer: https://github.com/GeneralMills/pytrends/issues/394
+    if len(keyword_list) > 5:
+        raise TrendAnalysisError(
+            "Google Trends allows a maximum of 5 keywords for comparison.\n"
+            "Please try again with 5 or fewer keywords."
+        )
+
     print(f"Connecting to Google Trends...")
     pytrends = TrendReq(hl='en-US', tz=timezone)
 
